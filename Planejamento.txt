@@ -1,0 +1,26 @@
+Três arquivos txt:
+    collection.txt      #Sao as cartas que o usuario ja conseguiu.
+    missing_cards.txt   #Sao as cartas que o usuario ainda nao conseguiu.
+    reset_collection.txt #Arquivo de referencia para reset de missing_cards (Opção reset para o usuário.)
+
+
+
+Usuário executa o programa:
+    1-Mensagem listando as opções.
+        -Adicionar carta à coleção.
+        -Resetar a coleção (Caso escolhida, pedir confirmacao).
+        -Sair do programa.      
+
+        (Após concluir uma das 3 opções acima, voltar a esse menu.)
+
+Lógica a ser feita:
+    Adicionar carta a coleção:
+        Necessário escrever no arquivo com formato específico.
+        Necessário apagar informações especificas do missing_cards.txt
+    
+    Resetar a coleção:
+        Apagar o missing_cards.txt (?)
+        Escrever o conteúdo do reset.txt nele.
+
+    Obs: talvez não seja necessário o reset.txt (Informação pode já estar armazenada na memória de dados).
+    
