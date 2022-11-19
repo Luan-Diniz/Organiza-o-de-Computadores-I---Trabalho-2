@@ -1,16 +1,16 @@
 .data
-	BOAS_VINDAS: .asciiz "----GERENCIADOR DE FIGURINHAS----"
-	MENU_ESCOLHA: .asciiz " Escolha uma das opções abaixo: "
-	OPCAO_ADICIONAR_FIGURINHA: .asciiz "1- Adicionar figurinha à coleção."
-	OPCAO_RESETAR: .asciiz "2- Recomeçe seu álbum do zero." 
-	OPCAO_SAIR: .asciiz "3- Sair do programa."
-	CONFIRMA_RESET: .asciiz " Você tem certeza que quer excluir seu progresso e começar de novo? (Ação PERMANENTE)"
-	INSTRUI_USUARIO_RESET1: .asciiz "1- Não."
-	INSTRUI_USUARIO_RESET2: .asciiz "2- Sim."
-	RESET_CONCLUIDO: .asciiz "Reset concluído com sucesso!"
-	INVALIDA: .asciiz "Entrada Inválida."
-	SAINDO: .asciiz "----SAINDO DO GERENCIADOR----"
-	DIGITE_FIGURINHA: .asciiz "Digite a figurinha para adiciona-lá em seu álbum: "
+	BOAS_VINDAS: .asciiz 	"----GERENCIADOR DE FIGURINHAS----"
+	MENU_ESCOLHA: .asciiz 	" Escolha uma das opções abaixo: "
+	OPCAO_ADICIONAR_FIGURINHA: .asciiz 	"1- Adicionar figurinha à coleção."
+	OPCAO_RESETAR: .asciiz 	"2- Recomeçe seu álbum do zero." 
+	OPCAO_SAIR: .asciiz 	"3- Sair do programa."
+	CONFIRMA_RESET: .asciiz 	" Você tem certeza que quer excluir seu progresso e começar de novo? (Ação PERMANENTE)"
+	INSTRUI_USUARIO_RESET1: .asciiz 	"1- Não."
+	INSTRUI_USUARIO_RESET2: .asciiz 	"2- Sim."
+	RESET_CONCLUIDO: .asciiz 	"Reset concluído com sucesso!"
+	INVALIDA: .asciiz 	"Entrada Inválida."
+	SAINDO: .asciiz 	"----SAINDO DO GERENCIADOR----"
+	DIGITE_FIGURINHA: .asciiz 	"Digite a figurinha para adiciona-lá em seu álbum: "
 	
 
 

@@ -5,13 +5,21 @@ Três arquivos txt:
 
 
 
-Usuário executa o programa:
+Usuário executa o programa:   (FEITO)
     1-Mensagem listando as opções.
         -Adicionar carta à coleção.
         -Resetar a coleção (Caso escolhida, pedir confirmacao).
         -Sair do programa.      
 
         (Após concluir uma das 3 opções acima, voltar a esse menu.)
+
+Formato das cartas: Sigla do pais com 3 letras, seguido com por número de 2 caracteres.
+		    A organização será na forma XXX00 (X as letras e 0 os números). OBS: Esse formato deve ser ressaltado ao usuário.
+		    Cada linha do arquivo corresponde as figurinhas de um país em específico.
+		(QAT01 QAT02 QAT03 QAT04 QAT05 QAT06 QAT07 QAT08 QAT09 QAT10 QAT11 QAT12 QAT13 QAT14 QAT15 QAT16 QAT17 QAT18 QAT19 QAT20)
+			
+
+
 
 Lógica a ser feita:
     Adicionar carta a coleção:
@@ -20,7 +28,5 @@ Lógica a ser feita:
     
     Resetar a coleção:
         Apagar o missing_cards.txt (?)
-        Escrever o conteúdo do reset.txt nele.
-
-    Obs: talvez não seja necessário o reset.txt (Informação pode já estar armazenada na memória de dados).
+        Escrever o conteúdo do reset.txt nele.(Talvez não seja necessário o reset.txt (Informação pode já estar armazenada na memória de dados).
     
