@@ -1,8 +1,171 @@
 .data
-
+	BOAS_VINDAS: .asciiz "----GERENCIADOR DE FIGURINHAS----"
+	MENU_ESCOLHA: .asciiz " Escolha uma das opções abaixo: "
+	OPCAO_ADICIONAR_FIGURINHA: .asciiz "1- Adicionar figurinha à coleção."
+	OPCAO_RESETAR: .asciiz "2- Recomeçe seu álbum do zero." 
+	OPCAO_SAIR: .asciiz "3- Sair do programa."
+	CONFIRMA_RESET: .asciiz " Você tem certeza que quer excluir seu progresso e começar de novo? (Ação PERMANENTE)"
+	INSTRUI_USUARIO_RESET1: .asciiz "1- Não."
+	INSTRUI_USUARIO_RESET2: .asciiz "2- Sim."
+	RESET_CONCLUIDO: .asciiz "Reset concluído com sucesso!"
+	INVALIDA: .asciiz "Entrada Inválida."
+	SAINDO: .asciiz "----SAINDO DO GERENCIADOR----"
+	DIGITE_FIGURINHA: .asciiz "Digite a figurinha para adiciona-lá em seu álbum: "
+	
 
 
 .text
 main:
+menu:
+	#A sequencia de comandos a seguir sao os prints do programa.
+	li	$v0, 4
+	la	$a0, BOAS_VINDAS
+	syscall
+	
+	li	$a0,10 		#ASCII do LF (Fim de linha)
+	li	$v0,11		#Syscall 11 o byte menos significativos de $a0 como um caractere ASCII
+	syscall
+
+	li	$v0, 4
+	la	$a0, MENU_ESCOLHA
+	syscall
+
+	li	$a0,10 		
+	li	$v0,11		
+	syscall	
+	li	$a0,9		#Ascii para tab.	
+	li	$v0,11		
+	syscall	
+	li	$v0, 4
+	la	$a0, OPCAO_ADICIONAR_FIGURINHA
+	syscall
+	
+	li	$a0,10 		
+	li	$v0,11		
+	syscall
+	li	$a0,9		#Ascii para tab.	
+	li	$v0,11		
+	syscall
+	li	$v0, 4
+	la	$a0, OPCAO_RESETAR
+	syscall
+	
+	li	$a0,10 		
+	li	$v0,11		
+	syscall
+	li	$a0,9			
+	li	$v0,11		
+	syscall
+	li	$v0, 4
+	la	$a0, OPCAO_SAIR
+	syscall
+	
+	li	$a0,10 		
+	li	$v0,11		
+	syscall
+	#Le a opcao digitada pelo usuario
+	li	$v0,5
+	syscall
+	move 	$t0,$v0
+	
+	beq	$t0,1,adicionar_figurinha
+	beq	$t0,2,reset
+	beq	$t0,3,sair
+	
+opcao_invalida:
+	li	$a0,10 		
+	li	$v0,11		
+	syscall
+	li	$v0, 4
+	la	$a0, INVALIDA
+	syscall
+	li	$a0,10 		
+	li	$v0,11		
+	syscall
+	
+	#Sleep de 1s +-
+	li	$v0,32
+	li	$a0,1000
+	syscall
+	
+	j 	main
+	
+sair:
+	li	$v0, 4
+	la	$a0, SAINDO
+	syscall
+	
+	li	$v0,10     #Termina a execucao do programa
+	syscall
+reset:
+	li	$v0, 4
+	la	$a0, CONFIRMA_RESET
+	syscall
+
+	li	$a0,10 		
+	li	$v0,11		
+	syscall
+	li	$a0,9			
+	li	$v0,11		
+	syscall
+	li	$v0, 4
+	la	$a0, INSTRUI_USUARIO_RESET1
+	syscall
+	li	$a0,10 		
+	li	$v0,11		
+	syscall
+	li	$a0,9			
+	li	$v0,11		
+	syscall
+	li	$v0, 4
+	la	$a0, INSTRUI_USUARIO_RESET2
+	syscall
+	li	$a0,10 		
+	li	$v0,11		
+	syscall
+	#Le oq usuario digitou
+	li	$v0,5
+	syscall
+	move 	$t0,$v0
+	
+	beq	$t0,1,menu
+	beq	$t0,2,continua_reset
+	
+	j	opcao_invalida
+	
+	continua_reset: #(A SER IMPLEMENTADO)
+	#LOGICA DO RESET IMPLEMENTADA AQUI
+	#PRINTA RESET CONCLUIDO E VOLTA AO MENU
+	
+	li	$a0,10 		
+	li	$v0,11		
+	syscall
+	li	$v0, 4
+	la	$a0, RESET_CONCLUIDO
+	syscall
+	li	$a0,10 		
+	li	$v0,11		
+	syscall
+	#Sleep de 2s +-
+	li	$v0,32
+	li	$a0,2000
+	syscall
+	
+	j 	menu
+	
+	
+adicionar_figurinha:
+	li	$a0,10 		
+	li	$v0,11		
+	syscall
+	li	$v0, 4
+	la	$a0, DIGITE_FIGURINHA
+	syscall
+	
+	#A SER IMPLEMENTADO
+	#Verificar se a figurinha é valida
+	#Codigo CHAVE do trabalho: vai ler a figurinha e mexer nos arquivos (tirar de um e colocar no outro)
 
 
+
+	
