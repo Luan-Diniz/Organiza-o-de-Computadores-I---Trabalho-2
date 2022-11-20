@@ -1,7 +1,7 @@
 Três arquivos txt:
     collection.txt      #Sao as cartas que o usuario ja conseguiu.
-    missing_cards.txt   #Sao as cartas que o usuario ainda nao conseguiu.
-    reset_collection.txt #Arquivo de referencia para reset de missing_cards (Opção reset para o usuário.)
+    missing_cards.txt   #Sao as cartas que o usuario ainda nao conseguiu
+    config.txt		#Criado na primeira execucao, informa infos.
 
 
 
@@ -31,7 +31,14 @@ Lógica a ser feita:
 	Resetar a coleção:  \\(FEITO)//
         	A informação do reset está armazenada na memória de dados e é utilizada por um procedimento dentro do label reset.
     	
-	Gerenciamento de arquivos:
+	Gerenciamento de arquivos: \\(DESCARTADO)// --> Os txt por padrão virão com o arquivo em assembly já.
 		Na primeira execução do MARS, o arquivo missing_cards.txt e o collection.txt não existe, isso causa problemas caso o usuário não dê primeiro um reset.
 		Portanto, o ideal seria verificar se esse arquivo já existe, se não existir, ele é criado. (Ver se isso é possível com MIPS assembly).
-		
+		Ver se o arquivo já existe: Criar novo arquivo na 1º execução. Essas infos serão escritas nele. Quando executar, o programa vai ler os dados dele para saber
+se os arquivos existem e a partir daí vai criar o necessário.
+
+	
+	Verificar entrada: \\(FEITO)//
+		Transformar letras minusculas em maiusculas. (Ou seja, se 97 <= ascii <= 120, fazer - 32, assim chegando a 65<=ascii<=90, que sao as letras maiusculas).
+		De resto não será feita mais verificações, o programa só não irá encontrar a carta e irá informar isso ao usuário.
+							     

@@ -57,6 +57,8 @@
 	
 .text
 main:
+
+
 menu:
 	#A sequencia de comandos a seguir sao os prints do programa.
 	li	$v0, 4
@@ -129,7 +131,7 @@ opcao_invalida:
 	li	$a0,1000
 	syscall
 	
-	j 	main
+	j 	menu
 	
 sair:
 	li	$v0, 4
@@ -223,12 +225,31 @@ adicionar_figurinha:
 	li	$a1,6  #tamanho do buffer
 	syscall
 	
-	
-	
+	upper_case:
+		la	$t2, INPUT_FIGURINHA
+		li	$t1,0 #cont para o loop
+		loop:
+			add	$t0,$t2,$t1
+			lb	$t3, 0($t0)        #Carrega caractere a caractere as letras do input do usuário
+						   #Caso elas sejam minusculas, se tornarao maiusculas
+			slti	$t9,$t3,123   #Limita superiormente para caracteres minusculos em ascii
+			beq	$t9,0,ending_loop
+			slti	$t9,$t3,65    #Limita inferiormente para caracteres minusculos em ascii
+			beq	$t9,1,ending_loop
+			
+			subi	$t3,$t3,32  #Transforma o caractere minusculo em maiusculo
+			sb	$t3,0($t0)  #Atualiza na memoria de dados	
+			
+		ending_loop:		
+			beq	$t1,3,out_of_loop
+			addi	$t1,$t1,1
+			j	loop
+		
+	out_of_loop:
 	#A SER IMPLEMENTADO
-	#Verificar se a figurinha é valida
+	#Verificar se a figurinha existe ou se ja foi adicionada (dar o feedback ao usuario)
 	#Codigo CHAVE do trabalho: vai ler a figurinha e mexer nos arquivos (tirar de um e colocar no outro)
-	j	main
+	j	menu
 
 
 #procedimento usado no reset
