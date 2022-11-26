@@ -12,6 +12,7 @@
 	SAINDO: .asciiz 	"----SAINDO DO GERENCIADOR----"
 	DIGITE_FIGURINHA: .asciiz 	"Digite a figurinha para adiciona-lá em seu álbum: "
 	INSTRUI_FIGURINHA: .asciiz	"Formato XXX00. Ex: QAT01, BRA07, JPN19, POR20"
+	FIGURINHA_NAO_ENCONTRADA: .asciiz	"A figurinha NÃO existe ou JÁ FOI adicionada na sua coleção!"
 	
 	arquivo_referencia: .asciiz	"missing_cards.txt"
 	arquivo_colecao: .asciiz	"collection.txt"
@@ -55,9 +56,12 @@
 	INPUT_FIGURINHA: .asciiz "      "
 	
 	
+	COLLECTION: .space 3840
+	MISSING_CARDS: .space 3840
+	
 .text
 main:
-
+	li	$s6,32    #Espaco em branco em ASCII 
 
 menu:
 	#A sequencia de comandos a seguir sao os prints do programa.
@@ -190,7 +194,7 @@ reset:
 	li	$a0,10 		
 	li	$v0,11		
 	syscall
-	#Sleep de 2s +-
+	#Sleep de 1.25s +-
 	li	$v0,32
 	li	$a0,1250
 	syscall
@@ -224,6 +228,9 @@ adicionar_figurinha:
 	la	$a0, INPUT_FIGURINHA
 	li	$a1,6  #tamanho do buffer
 	syscall
+	li	$a0,10 		#ASCII do LF (Fim de linha)
+	li	$v0,11
+	syscall
 	
 	upper_case:
 		la	$t2, INPUT_FIGURINHA
@@ -234,7 +241,7 @@ adicionar_figurinha:
 						   #Caso elas sejam minusculas, se tornarao maiusculas
 			slti	$t9,$t3,123   #Limita superiormente para caracteres minusculos em ascii
 			beq	$t9,0,ending_loop
-			slti	$t9,$t3,65    #Limita inferiormente para caracteres minusculos em ascii
+			slti	$t9,$t3,97    #Limita inferiormente para caracteres minusculos em ascii
 			beq	$t9,1,ending_loop
 			
 			subi	$t3,$t3,32  #Transforma o caractere minusculo em maiusculo
@@ -246,11 +253,29 @@ adicionar_figurinha:
 			j	loop
 		
 	out_of_loop:
-	#A SER IMPLEMENTADO
-	#Verificar se a figurinha existe ou se ja foi adicionada (dar o feedback ao usuario)
-	#Codigo CHAVE do trabalho: vai ler a figurinha e mexer nos arquivos (tirar de um e colocar no outro)
+	
+		jal	ler_arquivos		
+	
+		jal 	remove	#$s7 + endereco base do buffer vai estar com o endereco de onde a carta tem q ser adicionada
+				#$s7 = 0 se a carta nao foi encontrada
+		beq	$s7,0,nao_achou_volta_menu
+	#SE a figurinha existir: tira do missing_cards e põe no collection
+		jal	adiciona
+	
+	#LOGICA PARA ATUALIZAR OS ARQUIVOS.
+	#MENSAGEM DE SUCESSO
+	
+	li	$v0,32
+	li	$a0,1500
+	syscall
 	j	menu
-
+	
+	nao_achou_volta_menu:
+		li	$v0,32
+		li	$a0,1500
+		syscall
+	
+		j 	menu
 
 #procedimento usado no reset
 reset_arquivo:
@@ -616,19 +641,199 @@ reset_arquivo:
 		
 		#Fecha o arquivo
 		li	$v0,16
-		move	$a0,$s6
+		move	$a0,$t0
 		syscall
 		
 		#Fim do procedimento
 		jr	$ra
 	
 	
+ler_arquivos:   #le os arquivos missing_cards.txt e collection.txt e salva os seus conteudos na memoria
+
+	#Primeiro lê o collection.txt
+	li	$v0,13
+	la	$a0,arquivo_colecao
+	li	$a1,0
+	syscall
+	move 	$t0,$v0
+	
+	li	$v0,14
+	move	$a0,$t0
+	la	$a1, COLLECTION
+	la	$a2, 3840
+	syscall
+	
+	li	$v0,16
+	move	$a0,$t0
+	syscall
+
+
+
+	#Agora lê o missing_cards.txt
+	li	$v0,13
+	la	$a0,arquivo_referencia
+	li	$a1,0
+	syscall
+	move 	$t0,$v0
+	
+	li	$v0,14
+	move	$a0,$t0
+	la	$a1, MISSING_CARDS
+	la	$a2, 3840
+	syscall
+	
+	li	$v0,16
+	move	$a0,$t0
+	syscall
 	
 	
+	jr 	$ra
+	
+	 
+remove:
+	#Vai carregar cada caracter do input em registradores diferentes. ($t5 até $t9 respectivamente)
+	la	$t0,INPUT_FIGURINHA
+	lb	$t5,0($t0)
+	addi	$t0,$t0,1
+	lb	$t6,0($t0)
+	addi	$t0,$t0,1
+	lb	$t7,0($t0)
+	addi	$t0,$t0,1
+	lb	$t8,0($t0)
+	addi	$t0,$t0,1
+	lb	$t9,0($t0)
+			
+	
+	#PRIMEIRO O BUFFER MISSING_CARDS SERA VARRIDO
+	li	$t1,0	#Cont para as letras da palavra
+		
+	la	$t0,MISSING_CARDS
+	move	$s7,$t0
+	addi	$s7,$s7,3835
+	
+	lendo_caracter:
+		add	$t4,$t0,$t1
+		lb	$t3,0($t4)
+		
+		bne	$t3,$t5,caracter_diferente
+		
+		addi	$t1,$t1,1
+		add	$t4,$t0,$t1
+		lb	$t3,0($t4)
+		bne	$t3,$t6,caracter_diferente
+		
+		addi	$t1,$t1,1
+		add	$t4,$t0,$t1
+		lb	$t3,0($t4)
+		bne	$t3,$t7,caracter_diferente
+		
+		addi	$t1,$t1,1
+		add	$t4,$t0,$t1
+		lb	$t3,0($t4)
+		bne	$t3,$t8,caracter_diferente
+		
+		addi	$t1,$t1,1
+		add	$t4,$t0,$t1
+		lb	$t3,0($t4)
+		bne	$t3,$t9,caracter_diferente
+		
+		#Se chegou ate aqui eh pq todos os caracteres sao iguais.
+		#Aqui tem que ter a logica para excluir do arquivo ($t0 contem o inicio da carta)
+				#guarda o t0 para ser usado ao adicionar a carta no collection.txt
+				#usar para trocar por espaços em branco
+		li	$t1,0
+		add	$t4,$t0,$t1
+		sb	$s6,0($t4)
+		addi	$t1,$t1,1
+	
+		add	$t4,$t0,$t1
+		sb	$s6,0($t4)
+		addi	$t1,$t1,1
+		
+		add	$t4,$t0,$t1
+		sb	$s6,0($t4)
+		addi	$t1,$t1,1
+		
+		add	$t4,$t0,$t1
+		sb	$s6,0($t4)
+		addi	$t1,$t1,1
+		
+		add	$t4,$t0,$t1
+		sb	$s6,0($t4)
+		addi	$t1,$t1,1
+		
+		move	$s7,$t0	
+		la	$t0,MISSING_CARDS
+		sub	$s7,$s7,$t0			
+		
+		jr	$ra
+	caracter_diferente:
+		li	$t1,0
+		addi	$t0,$t0,6 #Vai para onde começa a proxima carta 
+		
+		slt 	$t2,$t0,$s7   #3835 eh onde começa a ultima carta
+					#entao se $t0<3835, continua o loop
+		beq	$t2,0,nao_encontrou			
+		
+		j 	lendo_caracter
+		
+		
+		
+	nao_encontrou:	
+		#mensagem dizendo que a carta ja foi adicionada ou eh inexistente
+		li	$v0, 4
+		la	$a0, FIGURINHA_NAO_ENCONTRADA
+		syscall
+		li	$a0,10 		#ASCII do LF (Fim de linha)
+		li	$v0,11
+		syscall
+		
+		li	$s7,0
+		jr 	$ra
+		
+adiciona:
+	#Vai carregar cada caracter do input em registradores diferentes. ($t5 até $t9 respectivamente)
+	la	$t0,INPUT_FIGURINHA
+	lb	$t5,0($t0)
+	addi	$t0,$t0,1
+	lb	$t6,0($t0)
+	addi	$t0,$t0,1
+	lb	$t7,0($t0)
+	addi	$t0,$t0,1
+	lb	$t8,0($t0)
+	addi	$t0,$t0,1
+	lb	$t9,0($t0)
+
+
+
+	la	$t0,COLLECTION
+	add	$t0,$t0,$s7	#Endereco para a carta
+	li	$t1,0
+	#logica para escrever no arquivo
+	
+	add	$t4,$t1,$t0
+	sb	$t5,0($t4)
+	addi	$t1,$t1,1
+	
+	add	$t4,$t1,$t0
+	sb	$t6,0($t4)
+	addi	$t1,$t1,1
+	
+	add	$t4,$t1,$t0
+	sb	$t7,0($t4)
+	addi	$t1,$t1,1
+	
+	add	$t4,$t1,$t0
+	sb	$t8,0($t4)
+	addi	$t1,$t1,1
+	
+	add	$t4,$t1,$t0
+	sb	$t9,0($t4)
 	
 	
+	jr	$ra
 	
-	
+		
 	
 	
 	

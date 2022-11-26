@@ -1,44 +1,9 @@
 Três arquivos txt:
     collection.txt      #Sao as cartas que o usuario ja conseguiu.
     missing_cards.txt   #Sao as cartas que o usuario ainda nao conseguiu
-    config.txt		#Criado na primeira execucao, informa infos.
+  
 
-
-
-Usuário executa o programa:   \\(FEITO)//
-    	1-Mensagem listando as opções.
-        	-Adicionar carta à coleção.
-        	-Resetar a coleção (Caso escolhida, pedir confirmacao).
-        	-Sair do programa.      
-        (Após concluir uma das 3 opções acima, voltar a esse menu.)
-
-
-Formato das cartas: Sigla do pais com 3 letras, seguido com por número de 2 caracteres.    \\(FEITO)//
-		    A organização será na forma XXX00 (X as letras e 0 os números). OBS: Esse formato deve ser ressaltado ao usuário.
-		    Cada linha do arquivo corresponde as figurinhas de um país em específico.
-		(QAT01 QAT02 QAT03 QAT04 QAT05 QAT06 QAT07 QAT08 QAT09 QAT10 QAT11 QAT12 QAT13 QAT14 QAT15 QAT16 QAT17 QAT18 QAT19 QAT20)
-			
-
-
-
-Lógica a ser feita:
-	
-    	Adicionar carta a coleção:
-        	Necessário escrever no arquivo com formato específico.
-        	Necessário apagar informações especificas do missing_cards.txt
-		Como não resetar os arquivos toda vez que usar? Ideia: Ler o conteúdo dos dois arquivos em buffers, fazer a alteração nesses buffers, e então escrevê-los novamente em seus arquivos de origem.
-    
-	Resetar a coleção:  \\(FEITO)//
-        	A informação do reset está armazenada na memória de dados e é utilizada por um procedimento dentro do label reset.
-    	
-	Gerenciamento de arquivos: \\(DESCARTADO)// --> Os txt por padrão virão com o arquivo em assembly já.
-		Na primeira execução do MARS, o arquivo missing_cards.txt e o collection.txt não existe, isso causa problemas caso o usuário não dê primeiro um reset.
-		Portanto, o ideal seria verificar se esse arquivo já existe, se não existir, ele é criado. (Ver se isso é possível com MIPS assembly).
-		Ver se o arquivo já existe: Criar novo arquivo na 1º execução. Essas infos serão escritas nele. Quando executar, o programa vai ler os dados dele para saber
-se os arquivos existem e a partir daí vai criar o necessário.
-
-	
-	Verificar entrada: \\(FEITO)//
-		Transformar letras minusculas em maiusculas. (Ou seja, se 97 <= ascii <= 120, fazer - 32, assim chegando a 65<=ascii<=90, que sao as letras maiusculas).
-		De resto não será feita mais verificações, o programa só não irá encontrar a carta e irá informar isso ao usuário.
-							     
+O que falta:
+	Erro: Não apaga o missing_carts.txt (testar)
+	!Precisar resetar o collection.txt
+	     
