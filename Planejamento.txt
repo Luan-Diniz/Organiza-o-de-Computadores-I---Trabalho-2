@@ -1,9 +1,0 @@
-Três arquivos txt:
-    collection.txt      #Sao as cartas que o usuario ja conseguiu.
-    missing_cards.txt   #Sao as cartas que o usuario ainda nao conseguiu
-  
-
-O que falta:
-	-Precisar resetar o collection.txt
-	-Mensagem de sucesso apos adicionar carta.
-	     

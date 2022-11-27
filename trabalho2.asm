@@ -13,6 +13,7 @@
 	DIGITE_FIGURINHA: .asciiz 	"Digite a figurinha para adiciona-lá em seu álbum: "
 	INSTRUI_FIGURINHA: .asciiz	"Formato XXX00. Ex: QAT01, BRA07, JPN19, POR20"
 	FIGURINHA_NAO_ENCONTRADA: .asciiz	"A figurinha NÃO existe ou JÁ FOI adicionada na sua coleção!"
+	FIGURINHA_SUCESSO: .asciiz	"Figurinha adicionada com SUCESSO!"
 	
 	arquivo_referencia: .asciiz	"missing_cards.txt"
 	arquivo_colecao: .asciiz	"collection.txt"
@@ -51,6 +52,7 @@
 	LINHA_RESET30: .asciiz 	"GHA01 GHA02 GHA03 GHA04 GHA05 GHA06 GHA07 GHA08 GHA09 GHA10 GHA11 GHA12 GHA13 GHA14 GHA15 GHA16 GHA17 GHA18 GHA19 GHA20"
 	LINHA_RESET31: .asciiz 	"URU01 URU02 URU03 URU04 URU05 URU06 URU07 URU08 URU09 URU10 URU11 URU12 URU13 URU14 URU15 URU16 URU17 URU18 URU19 URU20"
 	LINHA_RESET32: .asciiz 	"KOR01 KOR02 KOR03 KOR04 KOR05 KOR06 KOR07 KOR08 KOR09 KOR10 KOR11 KOR12 KOR13 KOR14 KOR15 KOR16 KOR17 KOR18 KOR19 KOR20"
+        RESET_COLLECTION: .asciiz  "                                                                                                                       "            
 	NEW_LINE: .word	10
 	
 	INPUT_FIGURINHA: .asciiz "      "
@@ -58,6 +60,7 @@
 	
 	COLLECTION: .space 3840
 	MISSING_CARDS: .space 3840
+	REWRITE_COLLECTION: .space 3840
 	
 .text
 main:
@@ -260,11 +263,18 @@ adicionar_figurinha:
 				#$s7 = 0 se a carta nao foi encontrada
 		beq	$s7,0,nao_achou_volta_menu
 	#SE a figurinha existir: tira do missing_cards e põe no collection
-		jal	adiciona
-	
+		jal	adiciona	
 		jal 	salvar_mudancas
-	#LOGICA PARA ATUALIZAR OS ARQUIVOS.
+
 	#MENSAGEM DE SUCESSO
+	li	$v0, 4
+	la	$a0, FIGURINHA_SUCESSO
+	syscall
+	li	$a0,10 		
+	li	$v0,11		
+	syscall
+	
+	
 	
 	li	$v0,32
 	li	$a0,1500
@@ -280,7 +290,7 @@ adicionar_figurinha:
 
 #procedimento usado no reset
 reset_arquivo:
-	li	$v0,13
+		li	$v0,13
 		la	$a0,arquivo_referencia  #Nome do arquivo a ser aberto
 		li	$a1,1
 		li	$a2,0
@@ -640,11 +650,48 @@ reset_arquivo:
 		syscall
 	
 		
-		#Fecha o arquivo
+		#Fecha o arquivo missing_cards.txt
 		li	$v0,16
 		move	$a0,$t0
 		syscall
 		
+		
+		#Abre o collection.txt
+		li	$v0,13
+		la	$a0,arquivo_colecao  #Nome do arquivo a ser aberto
+		li	$a1,1
+		li	$a2,0
+		syscall
+		move	$t0,$v0
+		
+		
+		#isso vai acontecer 32 vezes
+		li	$t1,1 #cont para 32
+		
+		reset_collection_loop:
+			li	$v0,15
+			move	$a0,$t0
+			la	$a1,REWRITE_COLLECTION
+			li	$a2, 119 
+			syscall
+			li	$v0,15
+			move	$a0,$t0
+			la	$a1,NEW_LINE
+			li	$a2, 1 
+			syscall
+		
+			addi	$t1,$t1,1
+			beq	$t1,32,out_reset_collection_loop
+			j	reset_collection_loop
+			
+		out_reset_collection_loop:
+			
+			#Fecha o arquivo collection.txt
+			li	$v0,16
+			move	$a0,$t0
+			syscall
+		
+	
 		#Fim do procedimento
 		jr	$ra
 	
