@@ -8,6 +8,7 @@ Professor: Marcelo Berejuck
 O trabalho foi realizado usando Assembly MIPS no simulador MARS.
 
 Instruções para a execução do trabalho2.asm:
+    (Necessário possuir Java na sua máquina)
     Ter o executável do MARS no mesmo diretório de dois txt: missing_cards.txt e collection.txt
     Abrir o trabalho2.asm no MARS.
      
