@@ -5,7 +5,7 @@ Professor: Marcelo Berejuck
 
 
 
-O trabalho será realizado usando Assembly MIPS no simulador MARS.
+O trabalho foi realizado usando Assembly MIPS no simulador MARS.
 
 Instruções para a execução do trabalho2.asm:
     Ter o executável do MARS no mesmo diretório de dois txt: missing_cards.txt e collection.txt
