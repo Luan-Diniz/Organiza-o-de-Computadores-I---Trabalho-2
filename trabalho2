@@ -262,6 +262,7 @@ adicionar_figurinha:
 	#SE a figurinha existir: tira do missing_cards e põe no collection
 		jal	adiciona
 	
+		jal 	salvar_mudancas
 	#LOGICA PARA ATUALIZAR OS ARQUIVOS.
 	#MENSAGEM DE SUCESSO
 	
@@ -834,7 +835,49 @@ adiciona:
 	jr	$ra
 	
 		
+salvar_mudancas:
+
+	#SALVA MUDANCAS NO missing_cards.txt
+	li	$v0,13
+	la	$a0, arquivo_referencia
+	li	$a1, 1
+	li	$a2,0
+	syscall
+	move 	$t0,$v0
 	
+	li	$v0,15
+	move	$a0,$t0
+	la	$a1, MISSING_CARDS
+	li	$a2, 3840
+	syscall
+	
+	li	$v0,16
+	move	$a0,$t0
+	syscall
+	
+	
+	
+	
+	#SALVA MUDANCAS NO collection.txt
+	li	$v0,13
+	la	$a0, arquivo_colecao
+	li	$a1, 1
+	li	$a2,0
+	syscall
+	move 	$t0,$v0
+	
+	li	$v0,15
+	move	$a0,$t0
+	la	$a1, COLLECTION
+	li	$a2, 3840
+	syscall
+	
+	li	$v0,16
+	move	$a0,$t0
+	syscall
+
+
+	jr	$ra
 	
 	
 	

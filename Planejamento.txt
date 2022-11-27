@@ -4,6 +4,6 @@ Três arquivos txt:
   
 
 O que falta:
-	Erro: Não apaga o missing_carts.txt (testar)
-	!Precisar resetar o collection.txt
+	-Precisar resetar o collection.txt
+	-Mensagem de sucesso apos adicionar carta.
 	     
